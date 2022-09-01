@@ -3,8 +3,6 @@ from io import BytesIO
 from flask import Flask, redirect, render_template, request, flash, send_file
 from pytube import YouTube
 
-import ffmpeg
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'zHyouxw7ztlfgkUV6RfLYY4pifWvT8CD'
 
@@ -26,14 +24,7 @@ def index():
             name = yt.title
             video_and_audio = yt.streams.filter(progressive=True)
 
-            # stream = yt.streams.get_audio_only()
-            # audio = stream.download()
-
             return render_template('/done.html', thumnail=thumnail, name=name, url=url, video_and_audio=video_and_audio)
-
-            # return send_file(audio,
-            #                  as_attachment=True,
-            #                  mimetype='audio/mp3')
 
         else:
             flash("Invalid URL", category='error')
@@ -67,8 +58,6 @@ def download():
             video.stream_to_buffer(buffer)
 
         buffer.seek(0)
-
-
 
         return send_file(buffer,
                          as_attachment=True,
